@@ -1,6 +1,6 @@
 #include "../codexion.h"
 
-static int	is_number(char *str)
+static int	is_positive_number(char *str)
 {
 	int	i;
 
@@ -16,12 +16,12 @@ static int	is_number(char *str)
 	return (1);
 }
 
-static int	parse_long(char *str, long *result)
+static int	ascii_to_long(char *str, long *result)
 {
 	long	number;
 	int		i;
 
-	if (!is_number(str))
+	if (!is_positive_number(str))
 		return (0);
 	number = 0;
 	i = 0;
@@ -38,19 +38,19 @@ static int	parse_long(char *str, long *result)
 
 static int	parse_numbers(char **argv, t_config *config)
 {
-	if (!parse_long(argv[1], &config->number_of_coders))
+	if (!ascii_to_long(argv[1], &config->number_of_coders))
 		return (0);
-	if (!parse_long(argv[2], &config->time_to_burnout))
+	if (!ascii_to_long(argv[2], &config->time_to_burnout))
 		return (0);
-	if (!parse_long(argv[3], &config->time_to_compile))
+	if (!ascii_to_long(argv[3], &config->time_to_compile))
 		return (0);
-	if (!parse_long(argv[4], &config->time_to_debug))
+	if (!ascii_to_long(argv[4], &config->time_to_debug))
 		return (0);
-	if (!parse_long(argv[5], &config->time_to_refactor))
+	if (!ascii_to_long(argv[5], &config->time_to_refactor))
 		return (0);
-	if (!parse_long(argv[6], &config->number_of_compiles_required))
+	if (!ascii_to_long(argv[6], &config->number_of_compiles_required))
 		return (0);
-	if (!parse_long(argv[7], &config->dongle_cooldown))
+	if (!ascii_to_long(argv[7], &config->dongle_cooldown))
 		return (0);
 	return (1);
 }
