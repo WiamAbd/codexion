@@ -1,0 +1,27 @@
+codexion.h
+    ↓
+parsing.c
+    ↓
+main.c
+    ↓
+time.c
+    ↓
+init.c
+    ↓
+heap.c
+    ↓
+scheduler.c
+    ↓
+dongle.c
+    ↓
+coder.c
+    ↓
+logging.c
+    ↓
+monitor.c
+    ↓
+simulation.c
+    ↓
+cleanup.c
+    ↓
+README.md
