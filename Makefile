@@ -3,18 +3,18 @@ NAME = codexion
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread
 
-SRCS = main.c \
-       parsing.c \
-       init.c \
-       simulation.c \
-       coder.c \
-       dongle.c \
-       scheduler.c \
-       heap.c \
-       monitor.c \
-       time.c \
-       logging.c \
-       cleanup.c
+SRCS = src/main.c \
+       src/parsing.c \
+       src/init.c \
+       src/simulation.c \
+       src/coder.c \
+       src/dongle.c \
+       src/scheduler.c \
+       src/heap.c \
+       src/monitor.c \
+       src/time.c \
+       src/logging.c \
+       src/cleanup.c
 
 OBJS = $(SRCS:.c=.o)
 

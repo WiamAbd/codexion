@@ -1,22 +1,48 @@
 #include "../codexion.h"
 #include <stdio.h>
 
+static void	print_test(t_sim *sim)
+{
+	long	i;
+
+	printf("----- CONFIG -----\n");
+	printf("Coders: %ld\n", sim->config.number_of_coders);
+	printf("Burnout: %ld\n", sim->config.time_to_burnout);
+	printf("Scheduler: %s\n", sim->config.scheduler);
+	printf("\n----- CODERS -----\n");
+	i = 0;
+	while (i < sim->config.number_of_coders)
+	{
+		printf("Coder[%ld]: id=%ld, compiles=%ld\n",
+			i, sim->coders[i].id, sim->coders[i].compile_count);
+		i++;
+	}
+	printf("\n----- DONGLES -----\n");
+	i = 0;
+	while (i < sim->config.number_of_coders)
+	{
+		printf("Dongle[%ld]: available=%d, available_at=%ld\n",
+			i, sim->dongles[i].available,
+			sim->dongles[i].available_at);
+		i++;
+	}
+}
+
 int	main(int argc, char **argv)
 {
-	t_config	config;
+	t_sim	sim;
 
-	if (!parse_arguments(argc, argv, &config))
+	if (!parse_arguments(argc, argv, &sim.config))
 	{
 		printf("Error: invalid arguments\n");
 		return (1);
 	}
-	printf("number_of_coders: %ld\n", config.number_of_coders);
-	printf("time_to_burnout: %ld\n", config.time_to_burnout);
-	printf("time_to_compile: %ld\n", config.time_to_compile);
-	printf("time_to_debug: %ld\n", config.time_to_debug);
-	printf("time_to_refactor: %ld\n", config.time_to_refactor);
-	printf("compiles_required: %ld\n", config.number_of_compiles_required);
-	printf("dongle_cooldown: %ld\n", config.dongle_cooldown);
-	printf("scheduler: %s\n", config.scheduler);
+	if (!init_simulation(&sim))
+	{
+		printf("Error: initialization failed\n");
+		return (1);
+	}
+	print_test(&sim);
+	cleanup_simulation(&sim);
 	return (0);
 }
