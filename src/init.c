@@ -21,18 +21,6 @@ static int	init_coders(t_sim *sim)
 	return (1);
 }
 
-static void	destroy_dongles(t_sim *sim, long count)
-{
-	long	i;
-
-	i = 0;
-	while (i < count)
-	{
-		pthread_cond_destroy(&sim->dongles[i].cond);
-		pthread_mutex_destroy(&sim->dongles[i].mutex);
-		i++;
-	}
-}
 static int	init_dongles(t_sim *sim)
 {
 	long	i;
@@ -46,13 +34,14 @@ static int	init_dongles(t_sim *sim)
 	{
 		sim->dongles[i].available = 1;
 		sim->dongles[i].available_at = 0;
-		if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0)
-			return (destroy_dongles(sim, i), free(sim->dongles), 0);
+		if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0){
+            destroy_dongles(sim, i);
+            return (0);
+        }
 		if (pthread_cond_init(&sim->dongles[i].cond, NULL) != 0)
 		{
 			pthread_mutex_destroy(&sim->dongles[i].mutex);
 			destroy_dongles(sim, i);
-			free(sim->dongles);
 			return (0);
 		}
 		i++;

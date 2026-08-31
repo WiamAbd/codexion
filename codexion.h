@@ -54,6 +54,8 @@ int	    init_simulation(t_sim *sim);
 int		parse_arguments(int argc, char **argv, t_config *config);
 int		init_simulation(t_sim *sim);
 void	cleanup_simulation(t_sim *sim);
+void	destroy_dongles(t_sim *sim, long count);
 long	get_time_ms(void);
 long	get_elapsed_ms(t_sim *sim);
+
 #endif
