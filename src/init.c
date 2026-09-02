@@ -34,7 +34,8 @@ static int	init_dongles(t_sim *sim)
 	{
 		sim->dongles[i].available = 1;
 		sim->dongles[i].available_at = 0;
-		if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0){
+		if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0)
+        {
             destroy_dongles(sim, i);
             return (0);
         }

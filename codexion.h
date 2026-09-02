@@ -49,6 +49,21 @@ typedef struct s_sim
 	pthread_mutex_t	state_mutex;
 }	t_sim;
 
+typedef struct s_request
+{
+	t_coder	*coder;
+	long	arrival_time;
+	long	deadline;
+}	t_request;
+
+typedef struct s_heap
+{
+	t_request	*items;
+	long		size;
+	long		capacity;
+	t_sim		*sim;
+}	t_heap;
+
 int	    parse_arguments(int argc, char **argv, t_config *config);
 int	    init_simulation(t_sim *sim);
 int		parse_arguments(int argc, char **argv, t_config *config);
@@ -57,5 +72,10 @@ void	cleanup_simulation(t_sim *sim);
 void	destroy_dongles(t_sim *sim, long count);
 long	get_time_ms(void);
 long	get_elapsed_ms(t_sim *sim);
-
+#heap
+int			init_heap(t_heap *heap, long capacity, t_sim *sim);
+int			heap_push(t_heap *heap, t_request request);
+t_request	*heap_peek(t_heap *heap);
+int			heap_pop(t_heap *heap, t_request *result);
+void		destroy_heap(t_heap *heap);
 #endif
