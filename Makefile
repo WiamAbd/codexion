@@ -14,7 +14,8 @@ SRCS = src/main.c \
        src/monitor.c \
        src/time.c \
        src/logging.c \
-       src/cleanup.c
+       src/cleanup.c \
+       src/heap_utils.c
 
 OBJS = $(SRCS:.c=.o)
 

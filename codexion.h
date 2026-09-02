@@ -26,7 +26,7 @@ typedef struct s_coder
 	pthread_t	thread;
 	long		last_compile_start;
 	long		compile_count;
-    t_sim       *sim;
+	t_sim		*sim;
 }	t_coder;
 
 typedef struct s_dongle
@@ -60,22 +60,21 @@ typedef struct s_heap
 {
 	t_request	*items;
 	long		size;
-	long		capacity;
 	t_sim		*sim;
 }	t_heap;
 
-int	    parse_arguments(int argc, char **argv, t_config *config);
-int	    init_simulation(t_sim *sim);
+
 int		parse_arguments(int argc, char **argv, t_config *config);
 int		init_simulation(t_sim *sim);
 void	cleanup_simulation(t_sim *sim);
 void	destroy_dongles(t_sim *sim, long count);
 long	get_time_ms(void);
 long	get_elapsed_ms(t_sim *sim);
-#heap
-int			init_heap(t_heap *heap, long capacity, t_sim *sim);
+int			init_heap(t_heap *heap, t_sim *sim);
 int			heap_push(t_heap *heap, t_request request);
 t_request	*heap_peek(t_heap *heap);
 int			heap_pop(t_heap *heap, t_request *result);
 void		destroy_heap(t_heap *heap);
+void		sift_up(t_heap *heap, long index);
+void		sift_down(t_heap *heap);
 #endif
