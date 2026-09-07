@@ -31,7 +31,7 @@ int	heap_pop(t_heap *heap, t_request *result)
 	if (heap->size > 0)
 	{
 		heap->items[0] = heap->items[heap->size];
-		sift_down(heap);
+		sift_down(heap, 0);
 	}
 	return (1);
 }
@@ -49,4 +49,23 @@ void	destroy_heap(t_heap *heap)
 	free(heap->items);
 	heap->items = NULL;
 	heap->size = 0;
+}
+
+int	heap_remove_coder(t_heap *heap, t_coder *coder)
+{
+	long	i;
+
+	i = 0;
+	while (i < heap->size
+		&& heap->items[i].coder != coder)
+		i++;
+	if (i == heap->size)
+		return (0);
+	heap->size--;
+	if (i != heap->size)
+	{
+		heap->items[i] = heap->items[heap->size];
+		heap_repair(heap, i);
+	}
+	return (1);
 }

@@ -29,6 +29,20 @@ static int	can_take(t_coder *coder, t_dongle *dongle)
 	return (1);
 }
 
+static void	wait_dongle(t_dongle *dongle)
+{
+	struct timespec	timeout;
+
+	if (dongle->available
+		&& get_time_ms() < dongle->available_at)
+	{
+		ms_to_timespec(dongle->available_at, &timeout);
+		pthread_cond_timedwait(&dongle->cond,
+			&dongle->mutex, &timeout);
+	}
+	else
+		pthread_cond_wait(&dongle->cond, &dongle->mutex);
+}
 int	acquire_dongle(t_coder *coder, t_dongle *dongle)
 {
 	t_request	request;
@@ -41,14 +55,20 @@ int	acquire_dongle(t_coder *coder, t_dongle *dongle)
 		pthread_mutex_unlock(&dongle->mutex);
 		return (0);
 	}
-	while (!can_take(coder, dongle))
-		pthread_cond_wait(&dongle->cond, &dongle->mutex);
+	while (!simulation_stopped(coder->sim)
+        && !can_take(coder, dongle))
+        wait_dongle(dongle);
+    if (simulation_stopped(coder->sim))
+    {
+        heap_remove_coder(&dongle->heap, coder);
+        pthread_mutex_unlock(&dongle->mutex);
+        return (0);
+    }
 	heap_pop(&dongle->heap, &removed);
 	dongle->available = 0;
 	pthread_mutex_unlock(&dongle->mutex);
 	return (1);
 }
-
 
 void	release_dongle(t_coder *coder, t_dongle *dongle)
 {

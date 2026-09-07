@@ -35,14 +35,11 @@ void	sift_up(t_heap *heap, long index)
 		index = parent;
 	}
 }
-void	sift_down(t_heap *heap)
+void	sift_down(t_heap *heap, long index)
 {
 	long	left;
 	long	right;
 	long	best;
-	long	index;
-
-	index = 0;
 
 	while (1)
 	{
@@ -62,4 +59,20 @@ void	sift_down(t_heap *heap)
 		swap(&heap->items[index], &heap->items[best]);
 		index = best;
 	}
+}
+
+void	heap_repair(t_heap *heap, long index)
+{
+	long	parent;
+
+	if (index == 0)
+	{
+		sift_down(heap, index);
+		return ;
+	}
+	parent = (index - 1) / 2;
+	if (compare(heap, &heap->items[index], &heap->items[parent]))
+		sift_up(heap, index);
+	else
+		sift_down(heap, index);
 }

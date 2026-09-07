@@ -6,6 +6,7 @@
 # include <pthread.h>
 # include <stdlib.h>
 # include <sys/time.h>
+# include <time.h>
 
 typedef struct s_config
 {
@@ -26,7 +27,7 @@ typedef struct s_coder
 	pthread_t	thread;
 	long		last_compile_start;
 	long		compile_count;
-    t_sim       *sim;
+    t_sim		*sim;
 }	t_coder;
 typedef struct s_request
 {
@@ -64,7 +65,6 @@ typedef struct s_sim
 
 
 
-
 int		parse_arguments(int argc, char **argv, t_config *config);
 int		init_simulation(t_sim *sim);
 void	cleanup_simulation(t_sim *sim);
@@ -77,10 +77,14 @@ t_request	*heap_peek(t_heap *heap);
 int			heap_pop(t_heap *heap, t_request *result);
 void		destroy_heap(t_heap *heap);
 void		sift_up(t_heap *heap, long index);
-void		sift_down(t_heap *heap);
+void		sift_down(t_heap *heap, long index);
 void		release_dongle(t_coder *coder, t_dongle *dongle);
 int			acquire_dongle(t_coder *coder, t_dongle *dongle);
-
+void		ms_to_timespec(long ms, struct timespec *time);
+void		heap_repair(t_heap *heap, long index);
+int			heap_remove_coder(t_heap *heap, t_coder *coder);
+int			simulation_stopped(t_sim *sim);
+void		stop_simulation(t_sim *sim);
 
 
 
