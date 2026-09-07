@@ -26,15 +26,28 @@ typedef struct s_coder
 	pthread_t	thread;
 	long		last_compile_start;
 	long		compile_count;
-	t_sim		*sim;
+    t_sim       *sim;
 }	t_coder;
+typedef struct s_request
+{
+	t_coder	*coder;
+	long	arrival_time;
+	long	deadline;
+}	t_request;
 
+typedef struct s_heap
+{
+	t_request	*items;
+	long		size;
+	t_sim		*sim;
+}	t_heap;
 typedef struct s_dongle
 {
 	int				available;
 	long			available_at;
 	pthread_mutex_t	mutex;
 	pthread_cond_t	cond;
+	t_heap			heap;
 }	t_dongle;
 
 typedef struct s_sim
@@ -49,19 +62,7 @@ typedef struct s_sim
 	pthread_mutex_t	state_mutex;
 }	t_sim;
 
-typedef struct s_request
-{
-	t_coder	*coder;
-	long	arrival_time;
-	long	deadline;
-}	t_request;
 
-typedef struct s_heap
-{
-	t_request	*items;
-	long		size;
-	t_sim		*sim;
-}	t_heap;
 
 
 int		parse_arguments(int argc, char **argv, t_config *config);
@@ -77,4 +78,10 @@ int			heap_pop(t_heap *heap, t_request *result);
 void		destroy_heap(t_heap *heap);
 void		sift_up(t_heap *heap, long index);
 void		sift_down(t_heap *heap);
+void		release_dongle(t_coder *coder, t_dongle *dongle);
+int			acquire_dongle(t_coder *coder, t_dongle *dongle);
+
+
+
+
 #endif

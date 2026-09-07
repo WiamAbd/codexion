@@ -20,6 +20,28 @@ static int	init_coders(t_sim *sim)
 	}
 	return (1);
 }
+static int	init_one_dongle(t_sim *sim, long i)
+{
+	t_dongle	*dongle;
+
+	dongle = &sim->dongles[i];
+	dongle->available = 1;
+	dongle->available_at = 0;
+	if (pthread_mutex_init(&dongle->mutex, NULL) != 0)
+		return (0);
+	if (pthread_cond_init(&dongle->cond, NULL) != 0)
+	{
+		pthread_mutex_destroy(&dongle->mutex);
+		return (0);
+	}
+	if (!init_heap(&dongle->heap, sim))
+	{
+		pthread_cond_destroy(&dongle->cond);
+		pthread_mutex_destroy(&dongle->mutex);
+		return (0);
+	}
+	return (1);
+}
 
 static int	init_dongles(t_sim *sim)
 {
@@ -32,16 +54,8 @@ static int	init_dongles(t_sim *sim)
 	i = 0;
 	while (i < sim->config.number_of_coders)
 	{
-		sim->dongles[i].available = 1;
-		sim->dongles[i].available_at = 0;
-		if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0)
-        {
-            destroy_dongles(sim, i);
-            return (0);
-        }
-		if (pthread_cond_init(&sim->dongles[i].cond, NULL) != 0)
+		if (!init_one_dongle(sim, i))
 		{
-			pthread_mutex_destroy(&sim->dongles[i].mutex);
 			destroy_dongles(sim, i);
 			return (0);
 		}
@@ -73,6 +87,7 @@ int	init_simulation(t_sim *sim)
 	if (!init_mutexes(sim))
 	{
 		free(sim->coders);
+		sim->coders = NULL;
 		return (0);
 	}
 	if (!init_dongles(sim))
@@ -80,6 +95,7 @@ int	init_simulation(t_sim *sim)
 		pthread_mutex_destroy(&sim->state_mutex);
 		pthread_mutex_destroy(&sim->print_mutex);
 		free(sim->coders);
+		sim->coders = NULL;
 		return (0);
 	}
 	return (1);

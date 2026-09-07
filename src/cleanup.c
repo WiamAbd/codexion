@@ -7,6 +7,7 @@ void	destroy_dongles(t_sim *sim, long count)
 	i = 0;
 	while (i < count)
 	{
+		destroy_heap(&sim->dongles[i].heap);
 		pthread_cond_destroy(&sim->dongles[i].cond);
 		pthread_mutex_destroy(&sim->dongles[i].mutex);
 		i++;
