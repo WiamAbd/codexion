@@ -7,6 +7,7 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <time.h>
+# include <unistd.h>
 
 typedef struct s_config
 {
@@ -23,11 +24,12 @@ typedef struct s_config
 typedef struct s_sim	t_sim;
 typedef struct s_coder
 {
-	long		id;
-	pthread_t	thread;
-	long		last_compile_start;
-	long		compile_count;
-    t_sim		*sim;
+	long			id;
+	pthread_t		thread;
+	long			last_compile_start;
+	long			compile_count;
+	pthread_mutex_t	state_mutex;
+	t_sim			*sim;
 }	t_coder;
 typedef struct s_request
 {
@@ -85,7 +87,8 @@ void		heap_repair(t_heap *heap, long index);
 int			heap_remove_coder(t_heap *heap, t_coder *coder);
 int			simulation_stopped(t_sim *sim);
 void		stop_simulation(t_sim *sim);
-
-
+void		destroy_coders(t_sim *sim, long count);
+void		sim_sleep(long duration, t_sim *sim);
+void		*coder_routine(void *arg);
 
 #endif

@@ -16,6 +16,11 @@ static int	init_coders(t_sim *sim)
 		sim->coders[i].last_compile_start = 0;
 		sim->coders[i].compile_count = 0;
 		sim->coders[i].sim = sim;
+		if (pthread_mutex_init(&sim->coders[i].state_mutex, NULL) != 0)
+		{
+			destroy_coders(sim, i);
+			return (0);
+		}
 		i++;
 	}
 	return (1);
@@ -86,16 +91,14 @@ int	init_simulation(t_sim *sim)
 		return (0);
 	if (!init_mutexes(sim))
 	{
-		free(sim->coders);
-		sim->coders = NULL;
+		destroy_coders(sim, sim->config.number_of_coders);
 		return (0);
 	}
 	if (!init_dongles(sim))
 	{
 		pthread_mutex_destroy(&sim->state_mutex);
 		pthread_mutex_destroy(&sim->print_mutex);
-		free(sim->coders);
-		sim->coders = NULL;
+		destroy_coders(sim, sim->config.number_of_coders);
 		return (0);
 	}
 	return (1);

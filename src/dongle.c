@@ -5,10 +5,14 @@
 static t_request	create_request(t_coder *coder)
 {
 	t_request	request;
+	long		last_compile;
 
+	pthread_mutex_lock(&coder->state_mutex);
+	last_compile = coder->last_compile_start;
+	pthread_mutex_unlock(&coder->state_mutex);
 	request.coder = coder;
 	request.arrival_time = get_time_ms();
-	request.deadline = coder->last_compile_start
+	request.deadline = last_compile
 		+ coder->sim->config.time_to_burnout;
 	return (request);
 }
