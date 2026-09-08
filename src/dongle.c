@@ -71,6 +71,7 @@ int	acquire_dongle(t_coder *coder, t_dongle *dongle)
 	heap_pop(&dongle->heap, &removed);
 	dongle->available = 0;
 	pthread_mutex_unlock(&dongle->mutex);
+    log_state(coder, "has taken a dongle");
 	return (1);
 }
 
