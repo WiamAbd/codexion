@@ -22,16 +22,20 @@ static void	get_dongles(t_coder *coder,
 static int	acquire_two_dongles(t_coder *coder,
 	t_dongle **first, t_dongle **second)
 {
+	long	arrival_time;
+
 	get_dongles(coder, first, second);
 	if (*first == *second)
 		return (0);
-	if (!acquire_dongle(coder, *first))
+	arrival_time = get_time_ms();
+	if (!acquire_dongle(coder, *first, arrival_time))
 		return (0);
-	if (!acquire_dongle(coder, *second))
+	if (!acquire_dongle(coder, *second, arrival_time))
 	{
 		release_dongle(coder, *first);
 		return (0);
 	}
+	log_start_compile(coder);
 	return (1);
 }
 static void	release_two_dongles(t_coder *coder,
@@ -43,10 +47,6 @@ static void	release_two_dongles(t_coder *coder,
 
 static void	compile_action(t_coder *coder)
 {
-	pthread_mutex_lock(&coder->state_mutex);
-	coder->last_compile_start = get_time_ms();
-	pthread_mutex_unlock(&coder->state_mutex);
-    log_state(coder, "is compiling");
 	sim_sleep(coder->sim->config.time_to_compile, coder->sim);
 	pthread_mutex_lock(&coder->state_mutex);
 	coder->compile_count++;
@@ -55,13 +55,13 @@ static void	compile_action(t_coder *coder)
 
 static void	debug_action(t_coder *coder)
 {
-    log_state(coder, "is debugging");
+	log_state(coder, "is debugging");
 	sim_sleep(coder->sim->config.time_to_debug, coder->sim);
 }
 
 static void	refactor_action(t_coder *coder)
 {
-    log_state(coder, "is refactoring");
+	log_state(coder, "is refactoring");
 	sim_sleep(coder->sim->config.time_to_refactor, coder->sim);
 }
 void	*coder_routine(void *arg)

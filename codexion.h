@@ -82,7 +82,7 @@ void		destroy_heap(t_heap *heap);
 void		sift_up(t_heap *heap, long index);
 void		sift_down(t_heap *heap, long index);
 void		release_dongle(t_coder *coder, t_dongle *dongle);
-int			acquire_dongle(t_coder *coder, t_dongle *dongle);
+int			acquire_dongle(t_coder *coder, t_dongle *dongle, long arrival_time);
 void		ms_to_timespec(long ms, struct timespec *time);
 void		heap_repair(t_heap *heap, long index);
 int			heap_remove_coder(t_heap *heap, t_coder *coder);
@@ -93,6 +93,7 @@ void		sim_sleep(long duration, t_sim *sim);
 void		*coder_routine(void *arg);
 void		log_state(t_coder *coder, char *state);
 void		log_burnout(t_coder *coder);
+void		log_start_compile(t_coder *coder);
 void		*monitor_routine(void *arg);
 int			start_simulation(t_sim *sim);
 

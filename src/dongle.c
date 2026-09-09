@@ -2,7 +2,7 @@
 #include "../codexion.h"
 
 
-static t_request	create_request(t_coder *coder)
+static t_request	create_request(t_coder *coder, long arrival_time)
 {
 	t_request	request;
 	long		last_compile;
@@ -11,7 +11,7 @@ static t_request	create_request(t_coder *coder)
 	last_compile = coder->last_compile_start;
 	pthread_mutex_unlock(&coder->state_mutex);
 	request.coder = coder;
-	request.arrival_time = get_time_ms();
+	request.arrival_time = arrival_time;
 	request.deadline = last_compile
 		+ coder->sim->config.time_to_burnout;
 	return (request);
@@ -47,12 +47,12 @@ static void	wait_dongle(t_dongle *dongle)
 	else
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
 }
-int	acquire_dongle(t_coder *coder, t_dongle *dongle)
+int	acquire_dongle(t_coder *coder, t_dongle *dongle, long arrival_time)
 {
 	t_request	request;
 	t_request	removed;
 
-	request = create_request(coder);
+	request = create_request(coder, arrival_time);
 	pthread_mutex_lock(&dongle->mutex);
 	if (!heap_push(&dongle->heap, request))
 	{
@@ -60,18 +60,17 @@ int	acquire_dongle(t_coder *coder, t_dongle *dongle)
 		return (0);
 	}
 	while (!simulation_stopped(coder->sim)
-        && !can_take(coder, dongle))
-        wait_dongle(dongle);
-    if (simulation_stopped(coder->sim))
-    {
-        heap_remove_coder(&dongle->heap, coder);
-        pthread_mutex_unlock(&dongle->mutex);
-        return (0);
-    }
+		&& !can_take(coder, dongle))
+		wait_dongle(dongle);
+	if (simulation_stopped(coder->sim))
+	{
+		heap_remove_coder(&dongle->heap, coder);
+		pthread_mutex_unlock(&dongle->mutex);
+		return (0);
+	}
 	heap_pop(&dongle->heap, &removed);
 	dongle->available = 0;
 	pthread_mutex_unlock(&dongle->mutex);
-    log_state(coder, "has taken a dongle");
 	return (1);
 }
 
