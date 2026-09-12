@@ -11,17 +11,6 @@ void	log_state(t_coder *coder, char *state)
 	pthread_mutex_unlock(&sim->print_mutex);
 }
 
-void	log_burnout(t_coder *coder)
-{
-	t_sim	*sim;
-
-	sim = coder->sim;
-	pthread_mutex_lock(&sim->print_mutex);
-	printf("%ld %ld burned out\n",
-		get_elapsed_ms(sim), coder->id);
-	pthread_mutex_unlock(&sim->print_mutex);
-}
-
 void	log_start_compile(t_coder *coder)
 {
 	t_sim	*sim;
@@ -40,5 +29,16 @@ void	log_start_compile(t_coder *coder)
 		printf("%ld %ld is compiling\n",
 			get_elapsed_ms(sim), coder->id);
 	}
+	pthread_mutex_unlock(&sim->print_mutex);
+}
+
+void	log_burnout(t_coder *coder)
+{
+	t_sim	*sim;
+
+	sim = coder->sim;
+	pthread_mutex_lock(&sim->print_mutex);
+	printf("%ld %ld burned out\n",
+		get_elapsed_ms(sim), coder->id);
 	pthread_mutex_unlock(&sim->print_mutex);
 }

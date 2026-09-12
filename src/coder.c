@@ -1,6 +1,6 @@
 #include "../codexion.h"
 
-static void	get_dongles(t_coder *coder,
+static void	even_odd_get_dongles(t_coder *coder,
 	t_dongle **first, t_dongle **second)
 {
 	long	index;
@@ -24,7 +24,7 @@ static int	acquire_two_dongles(t_coder *coder,
 {
 	long	arrival_time;
 
-	get_dongles(coder, first, second);
+	even_odd_get_dongles(coder, first, second);
 	if (*first == *second)
 		return (0);
 	arrival_time = get_time_ms();
@@ -35,18 +35,18 @@ static int	acquire_two_dongles(t_coder *coder,
 		release_dongle(coder, *first);
 		return (0);
 	}
-	log_start_compile(coder);
 	return (1);
 }
 static void	release_two_dongles(t_coder *coder,
 	t_dongle *first, t_dongle *second)
 {
-	release_dongle(coder, second);
 	release_dongle(coder, first);
+	release_dongle(coder, second);
 }
 
 static void	compile_action(t_coder *coder)
 {
+	log_start_compile(coder);
 	sim_sleep(coder->sim->config.time_to_compile, coder->sim);
 	pthread_mutex_lock(&coder->state_mutex);
 	coder->compile_count++;

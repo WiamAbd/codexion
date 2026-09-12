@@ -1,16 +1,4 @@
 #include "../codexion.h"
-static int	coder_burned_out(t_coder *coder)
-{
-	long	last_compile;
-	long	deadline;
-
-	pthread_mutex_lock(&coder->state_mutex);
-	last_compile = coder->last_compile_start;
-	pthread_mutex_unlock(&coder->state_mutex);
-	deadline = last_compile + coder->sim->config.time_to_burnout;
-	return (get_time_ms() >= deadline);
-}
-
 static int	all_finished(t_sim *sim)
 {
 	long	i;
@@ -27,6 +15,18 @@ static int	all_finished(t_sim *sim)
 		i++;
 	}
 	return (1);
+}
+
+static int	coder_burned_out(t_coder *coder)
+{
+	long	last_compile;
+	long	deadline;
+
+	pthread_mutex_lock(&coder->state_mutex);
+	last_compile = coder->last_compile_start;
+	pthread_mutex_unlock(&coder->state_mutex);
+	deadline = last_compile + coder->sim->config.time_to_burnout;
+	return (get_time_ms() >= deadline);
 }
 
 static t_coder	*find_burnout(t_sim *sim)
