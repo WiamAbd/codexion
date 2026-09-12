@@ -20,7 +20,6 @@ static int	compare(t_heap *heap, t_request *a, t_request *b)
 	return (a->coder->id < b->coder->id);
 }
 
-
 void	sift_up(t_heap *heap, long index)
 {
 	long	parent;
@@ -35,6 +34,7 @@ void	sift_up(t_heap *heap, long index)
 		index = parent;
 	}
 }
+
 void	sift_down(t_heap *heap, long index)
 {
 	long	left;

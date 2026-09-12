@@ -1,4 +1,5 @@
 #include "../codexion.h"
+
 void	destroy_coders(t_sim *sim, long count)
 {
 	long	i;
@@ -12,6 +13,7 @@ void	destroy_coders(t_sim *sim, long count)
 	free(sim->coders);
 	sim->coders = NULL;
 }
+
 void	destroy_dongles(t_sim *sim, long count)
 {
 	long	i;

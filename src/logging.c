@@ -1,4 +1,5 @@
 #include "../codexion.h"
+
 void	log_state(t_coder *coder, char *state)
 {
 	t_sim	*sim;

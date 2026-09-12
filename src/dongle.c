@@ -1,6 +1,4 @@
-
 #include "../codexion.h"
-
 
 static t_request	create_request(t_coder *coder, long arrival_time)
 {
@@ -47,6 +45,7 @@ static void	wait_dongle(t_dongle *dongle)
 	else
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
 }
+
 int	acquire_dongle(t_coder *coder, t_dongle *dongle, long arrival_time)
 {
 	t_request	request;

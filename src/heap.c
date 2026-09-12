@@ -1,7 +1,5 @@
 #include "../codexion.h"
 
-
-
 int	heap_push(t_heap *heap, t_request request)
 {
 	long	index;
@@ -14,13 +12,13 @@ int	heap_push(t_heap *heap, t_request request)
 	sift_up(heap, index);
 	return (1);
 }
+
 t_request	*heap_peek(t_heap *heap)
 {
 	if (heap->size == 0)
 		return (NULL);
 	return (&heap->items[0]);
 }
-
 
 int	heap_pop(t_heap *heap, t_request *result)
 {
@@ -34,21 +32,6 @@ int	heap_pop(t_heap *heap, t_request *result)
 		sift_down(heap, 0);
 	}
 	return (1);
-}
-int	init_heap(t_heap *heap, t_sim *sim)
-{
-	heap->items = malloc(sizeof(t_request) * sim->config.number_of_coders);
-	if (!heap->items)
-		return (0);
-	heap->size = 0;
-	heap->sim = sim;
-	return (1);
-}
-void	destroy_heap(t_heap *heap)
-{
-	free(heap->items);
-	heap->items = NULL;
-	heap->size = 0;
 }
 
 int	heap_remove_coder(t_heap *heap, t_coder *coder)

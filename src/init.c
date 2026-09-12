@@ -1,6 +1,5 @@
 #include "../codexion.h"
 
-
 static int	init_coders(t_sim *sim)
 {
 	long	i;
@@ -25,6 +24,7 @@ static int	init_coders(t_sim *sim)
 	}
 	return (1);
 }
+
 static int	init_one_dongle(t_sim *sim, long i)
 {
 	t_dongle	*dongle;

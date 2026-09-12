@@ -1,4 +1,5 @@
 #include "../codexion.h"
+
 static int	all_finished(t_sim *sim)
 {
 	long	i;

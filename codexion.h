@@ -56,17 +56,15 @@ typedef struct s_dongle
 
 typedef struct s_sim
 {
-	t_config	config;
-	t_coder		*coders;
-	t_dongle	*dongles;
-	long		start_time;
-	int			stop;
-	pthread_t	monitor;
+	t_config		config;
+	t_coder			*coders;
+	t_dongle		*dongles;
+	long			start_time;
+	int				stop;
+	pthread_t		monitor;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	state_mutex;
 }	t_sim;
-
-
 
 int			parse_arguments(int argc, char **argv, t_config *config);
 int			init_simulation(t_sim *sim);
@@ -83,6 +81,10 @@ void		sift_up(t_heap *heap, long index);
 void		sift_down(t_heap *heap, long index);
 void		release_dongle(t_coder *coder, t_dongle *dongle);
 int			acquire_dongle(t_coder *coder, t_dongle *dongle, long arrival_time);
+int			acquire_two_dongles(t_coder *coder,
+				t_dongle **first, t_dongle **second);
+void		release_two_dongles(t_coder *coder,
+				t_dongle *first, t_dongle *second);
 void		ms_to_timespec(long ms, struct timespec *time);
 void		heap_repair(t_heap *heap, long index);
 int			heap_remove_coder(t_heap *heap, t_coder *coder);
@@ -96,5 +98,7 @@ void		log_burnout(t_coder *coder);
 void		log_start_compile(t_coder *coder);
 void		*monitor_routine(void *arg);
 int			start_simulation(t_sim *sim);
+int			start_coders(t_sim *sim);
+void		join_coders(t_sim *sim);
 
 #endif

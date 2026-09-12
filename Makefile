@@ -7,10 +7,12 @@ SRCS = src/main.c \
        src/parsing.c \
        src/init.c \
        src/simulation.c \
+       src/simulation_threads.c \
        src/coder.c \
+       src/actions.c \
        src/dongle.c \
-       src/scheduler.c \
        src/heap.c \
+       src/heap_life.c \
        src/monitor.c \
        src/time.c \
        src/logging.c \
