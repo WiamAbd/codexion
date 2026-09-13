@@ -50,7 +50,7 @@ Example:
 
 - Course material and man pages for `pthread_mutex_*`, `pthread_cond_*`, and
   `pthread_create`/`pthread_join`.
-- The classic Dining Philosophers problem (Dijkstra) as the conceptual model for the
+- The classic Dining Philosophers problem as the conceptual model for the
   dongle-acquisition deadlock, and the standard asymmetric-ordering solution (odd/even
   acquisition order) used here to avoid circular wait.
 - Earliest Deadline First (EDF) scheduling as a real-time scheduling policy, adapted so

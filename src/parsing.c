@@ -40,7 +40,7 @@ static int	is_positive_number(char *str)
 	return (1);
 }
 
-static int	ascii_to_long(char *str, long *result)
+static int	ascii_to_long(char *str, long *result, int flag)
 {
 	long	number;
 	int		i;
@@ -61,24 +61,26 @@ static int	ascii_to_long(char *str, long *result)
 	if (number > INT_MAX)
 		return (0);
 	*result = number;
+	if (flag == 1 && number == 0)
+		return (0);
 	return (1);
 }
 
 static int	parse_numbers(char **argv, t_config *config)
 {
-	if (!ascii_to_long(argv[1], &config->number_of_coders))
+	if (!ascii_to_long(argv[1], &config->number_of_coders, 0))
 		return (0);
-	if (!ascii_to_long(argv[2], &config->time_to_burnout))
+	if (!ascii_to_long(argv[2], &config->time_to_burnout, 1))
 		return (0);
-	if (!ascii_to_long(argv[3], &config->time_to_compile))
+	if (!ascii_to_long(argv[3], &config->time_to_compile, 0))
 		return (0);
-	if (!ascii_to_long(argv[4], &config->time_to_debug))
+	if (!ascii_to_long(argv[4], &config->time_to_debug, 0))
 		return (0);
-	if (!ascii_to_long(argv[5], &config->time_to_refactor))
+	if (!ascii_to_long(argv[5], &config->time_to_refactor, 0))
 		return (0);
-	if (!ascii_to_long(argv[6], &config->number_of_compiles_required))
+	if (!ascii_to_long(argv[6], &config->number_of_compiles_required, 1))
 		return (0);
-	if (!ascii_to_long(argv[7], &config->dongle_cooldown))
+	if (!ascii_to_long(argv[7], &config->dongle_cooldown, 0))
 		return (0);
 	return (1);
 }
