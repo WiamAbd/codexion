@@ -26,9 +26,17 @@ static int	compare(t_heap *heap, t_request *a, t_request *b)
 	if (strcmp(heap->sim->config.scheduler, "fifo") == 0
 		&& a->arrival_time != b->arrival_time)
 		return (a->arrival_time < b->arrival_time);
+	else if (strcmp(heap->sim->config.scheduler, "fifo") == 0
+		&& a->arrival_time == b->arrival_time
+		&& a->deadline != b->deadline)
+		return (a->deadline < b->deadline);
 	else if (strcmp(heap->sim->config.scheduler, "edf") == 0
 		&& a->deadline != b->deadline)
 		return (a->deadline < b->deadline);
+	else if (strcmp(heap->sim->config.scheduler, "edf") == 0
+		&& a->deadline == b->deadline
+		&& a->arrival_time != b->arrival_time)
+		return (a->arrival_time < b->arrival_time);
 	return (a->coder->id < b->coder->id);
 }
 
